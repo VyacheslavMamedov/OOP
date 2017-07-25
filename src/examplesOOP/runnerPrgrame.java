@@ -1,9 +1,18 @@
 package examplesOOP;
 
+import examplesOOP.chain.adapter.AdapterJavaToDatabase;
+import examplesOOP.chain.adapter.Database;
 import examplesOOP.chain.bridge.*;
 import examplesOOP.chain.chain.*;
 import examplesOOP.chain.factory.*;
-
+import examplesOOP.chain.interpreter.AndExpression;
+import examplesOOP.chain.interpreter.Expression;
+import examplesOOP.chain.interpreter.OrExpression;
+import examplesOOP.chain.interpreter.TerminalExpression;
+import examplesOOP.chain.prototype.Creater;
+import examplesOOP.chain.prototype.Project;
+import examplesOOP.chain.prototype.ProjectFactory;
+import examplesOOP.chain.prototype.Toys;
 
 
 import java.util.Scanner;
@@ -76,7 +85,42 @@ public class runnerPrgrame {
                     stoped = false;
                     break;
                 }
-                case 4: {
+                case 4:{
+                    Expression isJava = getJavaExpression();
+                    Expression isJavaEEDeveloper = getJavaEEExpression();
+
+                    System.out.println("Does developer knows Java Core: " + isJava.interpret("Java"));
+                    System.out.println("Does developer knows Java EE: " + isJavaEEDeveloper.interpret("Java Spring"));
+                }
+
+                case 5:{
+                    Database database = new AdapterJavaToDatabase();
+
+                    database.insert();
+                    database.insert();
+                    database.insert();
+                    database.update();
+                    database.select();
+                    database.remove();
+                }
+
+                case 6:{
+                    Creater.Starter();
+
+                    Toys toyGirl = Creater.getToys(3);
+                    System.out.println(toyGirl.getType() + " : " + toyGirl.getCost());
+                    toyGirl.CreateToys();
+
+                    Toys toyCar = Creater.getToys(2);
+                    System.out.println(toyCar.getType() + " : " + toyCar.getCost());
+                    toyCar.CreateToys();
+
+                    Toys toyBall = Creater.getToys(3);
+                    System.out.println(toyBall.getType() + " : " + toyBall.getCost());
+                    toyBall.CreateToys();
+
+                }
+                case 7: {
                     stoped = true;
                     break;
                 }
@@ -84,12 +128,29 @@ public class runnerPrgrame {
         }
         }
 
+
+    public static Expression getJavaExpression() {
+        Expression java = new TerminalExpression("Java");
+        Expression javaCore = new TerminalExpression("Java Core");
+
+        return new OrExpression(java, javaCore);
+    }
+
+    public static Expression getJavaEEExpression() {
+        Expression java = new TerminalExpression("Java");
+        Expression spring = new TerminalExpression("Spring");
+
+        return new AndExpression(java, spring);
+    }
     private static void mainMenu(){
         System.out.println("OOP Exsamples:");
         System.out.println("    1. Chain.");
         System.out.println("    2. Bridge");
         System.out.println("    3. Factory");
-        System.out.println("    4. Exit");
+        System.out.println("    4. Inprerter");
+        System.out.println("    5. Adapter");
+        System.out.println("    6. Prototype");
+        System.out.println("    7. Exit");
     }
     static int correctEnterToIntScanner(Scanner keyboard, String messageInput)
     {
